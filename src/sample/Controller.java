@@ -217,7 +217,13 @@ public class Controller implements Initializable {
         TextField prenomInput = new TextField();
         TextField telephoneInput = new TextField();
         TextField emailInput = new TextField();
-        TextField specInput = new TextField();
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "JEE",
+                        "FEBE",
+                        "C#"
+                );
+        ComboBox specInput = new ComboBox(options);
 
         Label nomLabel = new Label("Nom:");
         nomLabel.setTextFill(Color.WHITE);
@@ -260,7 +266,7 @@ public class Controller implements Initializable {
             String nom = nomInput.getText().toString();
             String tel = telephoneInput.getText().toString();
             String email = emailInput.getText().toString();
-            String spacialite = specInput.getText().toString();
+            String spacialite = specInput.getSelectionModel().getSelectedItem().toString();
             String sql="INSERT INTO `etudiants`(`nom`, `prenom`, `tel`, `email`, `specialite`) VALUES(?,?,?,?,?)";
             try {
                 prepared=cnx.prepareStatement(sql);
@@ -275,7 +281,7 @@ public class Controller implements Initializable {
                 nomInput.setText("");
                 telephoneInput.setText("");
                 emailInput.setText("");
-                specInput.setText("");
+                specInput.setValue("");
                 afficherList();
 
 
@@ -380,7 +386,7 @@ public class Controller implements Initializable {
         specialiteVBoxLeft.setPadding(new Insets(5,20,5,5));
         leftInputs.getChildren().add(specialiteVBoxLeft);
         VBox btnVBoxLeft = new VBox();
-        btnVBoxLeft.setPadding(new Insets(5,20,-10,5));
+        btnVBoxLeft.setPadding(new Insets(5,40,-10,15));
         leftInputs.getChildren().add(btnVBoxLeft);
 
         //instanciation des labels
@@ -444,11 +450,41 @@ public class Controller implements Initializable {
         emailVBoxLeft.getChildren().add(leftEmailInput);
         specialiteVBoxLeft.getChildren().add(leftSpecInput);
         //Left inputsButton
-        Button updateBtn = new Button("Modifier");
+        Image editImg = new Image(getClass().getResource("img/edit.png").toString());
+        ImageView updateBtn = new ImageView();
+        updateBtn.setImage(editImg);
+        updateBtn.setFitHeight(45);
+        updateBtn.setFitWidth(45);
         btnVBoxLeft.getChildren().add(updateBtn);
         btnVBoxLeft.setAlignment(Pos.CENTER);
         updateBtn.setCursor(Cursor.HAND);
-        updateBtn.setAlignment(Pos.CENTER);
+        btnVBoxLeft.getChildren().add(new Label());
+        btnVBoxLeft.getChildren().add(new Label());
+
+        Image deleteImg = new Image(getClass().getResource("img/delete-forever.png").toString());
+        ImageView deleteIV = new ImageView();
+        deleteIV.setImage(deleteImg);
+        deleteIV.setFitWidth(45);
+        deleteIV.setFitHeight(45);
+        btnVBoxLeft.getChildren().add(deleteIV);
+
+
+        updateBtn.setOnMousePressed(e2->{
+            updateBtn.setScaleX(0.9);
+            updateBtn.setScaleY(0.9);
+        });
+        updateBtn.setOnMouseReleased(e3->{
+            updateBtn.setScaleX(1);
+            updateBtn.setScaleY(1);
+        });
+        deleteIV.setOnMousePressed(e2->{
+            deleteIV.setScaleX(0.9);
+            deleteIV.setScaleY(0.9);
+        });
+        deleteIV.setOnMouseReleased(e3->{
+            deleteIV.setScaleX(1);
+            deleteIV.setScaleY(1);
+        });
 
         leftVBox.getChildren().clear();
         Label leftTitle = new Label("Modifier");
@@ -549,7 +585,7 @@ public class Controller implements Initializable {
             leftSpecInput.setText(tableView.getSelectionModel().getSelectedItem().getSpecialite());
         });
         //Update
-        updateBtn.setOnAction(a5->{
+        updateBtn.setOnMouseClicked(a5->{
 //            UPDATE `etudiants` SET `id`=[value-1],`nom`=[value-2],`prenom`=[value-3],`tel`=[value-4],`email`=[value-5],`specialite`=[value-6] WHERE 1
             Connection  cnx =ConnexionMySQL.cnx();
             PreparedStatement prepared;
@@ -579,10 +615,34 @@ public class Controller implements Initializable {
 
             } catch (SQLException e1) {
                 e1.printStackTrace();
+
             }
 
         });
 
+        //DELETE
+        deleteIV.setOnMouseClicked(e1->{
+            System.out.println("DELETED");
+            Connection  cnx =ConnexionMySQL.cnx();
+            PreparedStatement prepared;
+            int idDelete = tableView.getSelectionModel().getSelectedItem().getId();
+            String sql = "DELETE FROM `etudiants` WHERE id="+idDelete;
+
+            try {
+                prepared = cnx.prepareStatement(sql);
+                prepared.execute();
+                leftPrenomInput.setText("");
+                leftNomInput.setText("");
+                leftTelInput.setText("");
+                leftEmailInput.setText("");
+                leftSpecInput.setText("");
+
+                afficherList();
+            }catch (SQLException e2){
+                e2.printStackTrace();
+            }
+
+        });
 
 
 
