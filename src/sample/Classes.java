@@ -8,16 +8,19 @@ public class Classes {
         private String Prenom;
         private String telephone;
         private String email;
+        private String specialite;
 
 
     //Constructor
 
-    public Classes(int id, String nom, String prenom, String telephone, String email) {
+    public Classes(int id, String nom, String prenom, String telephone, String email, String specialite) {
         this.id = id;
         this.nom = nom;
         Prenom = prenom;
         this.telephone = telephone;
         this.email = email;
+        this.specialite=specialite;
+
     }
 
     //Getters/Setters
@@ -62,6 +65,13 @@ public class Classes {
         this.email = email;
     }
 
+    public String getSpecialite() {
+        return specialite;
+    }
+
+    public void setSpecialite(String specialite) {
+        this.specialite = specialite;
+    }
     //Methodes
 
 

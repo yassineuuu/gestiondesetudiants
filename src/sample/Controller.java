@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -24,9 +25,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
 
     //Variables
 
@@ -41,8 +44,12 @@ public class Controller {
     private Button addBtn;
     @FXML
     private Button removeBtn;
+    @FXML
+    private VBox leftVBox;
 
     private Label title = new Label();
+
+
 
 
 
@@ -53,6 +60,7 @@ public class Controller {
         Connection  cnx =ConnexionMySQL.cnx();
         PreparedStatement prepared;
         String query = "SELECT * FROM etudiants";
+
         Statement st;
         ResultSet rs;
 
@@ -62,8 +70,8 @@ public class Controller {
             Classes etudiant;
             while(rs.next()){
                 etudiant = new Classes(rs.getInt("id"), rs.getString("nom"),
-                        rs.getString("prénom"), rs.getString("tel"),
-                        rs.getString("email"));
+                        rs.getString("prenom"), rs.getString("tel"),
+                        rs.getString("email"),rs.getString("specialite"));
                 etudiantList.add(etudiant);
             }
 
@@ -72,6 +80,8 @@ public class Controller {
         }
         return etudiantList;
     }
+
+
 
     public void afficherList(){
         //Title
@@ -83,7 +93,6 @@ public class Controller {
         centerVBox.getChildren().add(title);
 
         //Tableau
-        ScrollPane tableBox = new ScrollPane();
         TableView <Classes> tableView = new TableView<Classes>();
         tableView.setMaxHeight(300);
             //les colones du tableau
@@ -93,28 +102,33 @@ public class Controller {
         id.setText("ID");
 
         TableColumn <Classes, String> nom = new TableColumn<>();
-        nom.setMinWidth(100);
+        nom.setMinWidth(80);
         nom.setCellValueFactory(new PropertyValueFactory<>("Nom"));
         nom.setText("Nom");
 
         TableColumn <Classes, String> prenom = new TableColumn<>();
-        prenom.setMinWidth(100);
+        prenom.setMinWidth(90);
         prenom.setCellValueFactory(new PropertyValueFactory<>("Prenom"));
-        prenom.setText("Prénom");
+        prenom.setText("Prenom");
 
         TableColumn <Classes, String> telephone = new TableColumn<>();
-        telephone.setMinWidth(150);
+        telephone.setMinWidth(120);
         telephone.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
-        telephone.setText("Téléphone");
+        telephone.setText("Telephone");
+
+        TableColumn <Classes, Integer> specialite = new TableColumn<>();
+        specialite.setMinWidth(50);
+        specialite.setCellValueFactory(new PropertyValueFactory<>("specialite"));
+        specialite.setText("SpecialitÃ©");
 
         TableColumn <Classes, Integer> email = new TableColumn<>();
-        email.setMinWidth(250);
+        email.setMinWidth(150);
         email.setCellValueFactory(new PropertyValueFactory<>("Email"));
         email.setText("Email");
 
             //Affichage du tableau
         tableView.setItems(getEtudiant());
-        tableView.getColumns().addAll(id, nom, prenom, telephone, email);
+        tableView.getColumns().addAll(id, nom, prenom, telephone, email,specialite);
         centerVBox.getChildren().add(tableView);
 
 
@@ -149,7 +163,7 @@ public class Controller {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion Ees Etudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -164,7 +178,7 @@ public class Controller {
     public void addToList(){
         //Title
         centerVBox.getChildren().clear();
-        title.setText("Ajouter un étudiant");
+        title.setText("Ajouter un Etudiant");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font("Bodoni MT italic",36));
         title.setPadding(new Insets(0,0,30,0));
@@ -187,6 +201,8 @@ public class Controller {
         telephoneVBox.setPadding(new Insets(5,0,5,0));
         VBox emailVBox = new VBox();
         emailVBox.setPadding(new Insets(5,0,5,0));
+        VBox specialiteVBox = new VBox();
+        specialiteVBox.setPadding(new Insets(5,0,5,0));
         VBox btnVBox = new VBox();
         btnVBox.setPadding(new Insets(5,0,5,0));
 
@@ -194,31 +210,38 @@ public class Controller {
         inputs.getChildren().add(prenomVBox);
         inputs.getChildren().add(telephoneVBox);
         inputs.getChildren().add(emailVBox);
+        inputs.getChildren().add(specialiteVBox);
         inputs.getChildren().add(btnVBox);
 
         TextField nomInput = new TextField();
         TextField prenomInput = new TextField();
         TextField telephoneInput = new TextField();
         TextField emailInput = new TextField();
+        TextField specInput = new TextField();
 
         Label nomLabel = new Label("Nom:");
         nomLabel.setTextFill(Color.WHITE);
-        Label prenomLabel = new Label("Prénom:");
+        Label prenomLabel = new Label("Prenom:");
         prenomLabel.setTextFill(Color.WHITE);
-        Label telephoneLabel = new Label("Téléphone:");
+        Label telephoneLabel = new Label("Telephone:");
         telephoneLabel.setTextFill(Color.WHITE);
         Label emailLabel = new Label("Email:");
         emailLabel.setTextFill(Color.WHITE);
+        Label specLabel = new Label("Specialite:");
+        specLabel.setTextFill(Color.WHITE);
 
         nomVBox.getChildren().add(nomLabel);
         prenomVBox.getChildren().add(prenomLabel);
         telephoneVBox.getChildren().add(telephoneLabel);
         emailVBox.getChildren().add(emailLabel);
+        specialiteVBox.getChildren().add(specLabel);
 
         nomVBox.getChildren().add(nomInput);
         prenomVBox.getChildren().add(prenomInput);
         telephoneVBox.getChildren().add(telephoneInput);
         emailVBox.getChildren().add(emailInput);
+        specialiteVBox.getChildren().add(specInput);
+
 
         Button addBtn = new Button("Ajouter");
         btnVBox.getChildren().add(addBtn);
@@ -228,7 +251,7 @@ public class Controller {
 
 
 
-        //Ajout au base de donnée
+        //Ajout au base de donnÃ©e
 
         addBtn.setOnAction(a2->{
             Connection  cnx =ConnexionMySQL.cnx();
@@ -237,24 +260,29 @@ public class Controller {
             String nom = nomInput.getText().toString();
             String tel = telephoneInput.getText().toString();
             String email = emailInput.getText().toString();
-            String sql="INSERT INTO `etudiants`(`nom`, `prénom`, `tel`, `email`) VALUES(?,?,?,?)";
+            String spacialite = specInput.getText().toString();
+            String sql="INSERT INTO `etudiants`(`nom`, `prenom`, `tel`, `email`, `specialite`) VALUES(?,?,?,?,?)";
             try {
                 prepared=cnx.prepareStatement(sql);
-                prepared.setString(1,prenom);
-                prepared.setString(2,nom);
+                prepared.setString(1,nom);
+                prepared.setString(2,prenom);
                 prepared.setString(3,tel);
                 prepared.setString(4,email);
+                prepared.setString(5,spacialite);
                 prepared.execute();
 
                 prenomInput.setText("");
                 nomInput.setText("");
                 telephoneInput.setText("");
                 emailInput.setText("");
+                specInput.setText("");
+                afficherList();
 
 
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+
 
         });
 
@@ -293,7 +321,7 @@ public class Controller {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion des ÃƒÂ©tudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -304,7 +332,8 @@ public class Controller {
 
     public void findInList(){
         centerVBox.getChildren().clear();
-        title.setText("Rechercher un Ã©tudiant");
+        leftVBox.getChildren().clear();
+        title.setText("Rechercher un Etudiant");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font("Bodoni MT italic",36));
         title.setPadding(new Insets(0,0,30,0));
@@ -329,13 +358,37 @@ public class Controller {
         VBox btnVBox = new VBox();
         btnVBox.setPadding(new Insets(5,20,-10,5));
         inputsHbox.getChildren().add(btnVBox);
+        
+        VBox leftInputs = new VBox();
+        leftInputs.setPadding(new Insets(5,20,-10,5));
+        leftVBox.getChildren().add(leftInputs);
+
+
+        VBox nomVBoxLeft = new VBox();
+        nomVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(nomVBoxLeft);
+        VBox prenomVBoxLeft = new VBox();
+        prenomVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(prenomVBoxLeft);
+        VBox telVBoxLeft = new VBox();
+        telVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(telVBoxLeft);
+        VBox emailVBoxLeft = new VBox();
+        emailVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(emailVBoxLeft);
+        VBox specialiteVBoxLeft = new VBox();
+        specialiteVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(specialiteVBoxLeft);
+        VBox btnVBoxLeft = new VBox();
+        btnVBoxLeft.setPadding(new Insets(5,20,-10,5));
+        leftInputs.getChildren().add(btnVBoxLeft);
 
         //instanciation des labels
         Label idLabel = new Label("ID:");
         idLabel.setTextFill(Color.WHITE);
         Label nomLabel = new Label("Nom:");
         nomLabel.setTextFill(Color.WHITE);
-        Label prenomLabel = new Label("PrÃ©nom:");
+        Label prenomLabel = new Label("Prenom:");
         prenomLabel.setTextFill(Color.WHITE);
 
         //instanciation des inputs
@@ -359,12 +412,53 @@ public class Controller {
         btnVBox.setAlignment(Pos.CENTER);
         findBtn.setCursor(Cursor.HAND);
         findBtn.setAlignment(Pos.CENTER);
-        findBtn.setOnAction(a3->{
-            String idFind = idInput.getText().toString();
-            String prenomFind = prenomInput.getText().toString();
-            String nomFind = nomInput.getText().toString();
 
-        });
+        //Left VBox
+        TextField leftSpecInput = new TextField();
+        TextField leftNomInput = new TextField();
+        TextField leftPrenomInput = new TextField();
+        TextField leftTelInput = new TextField();
+        TextField leftEmailInput = new TextField();
+        //left labels
+        Label leftSpecLabel = new Label("Specialite:");
+        leftSpecLabel.setTextFill(Color.WHITE);
+        Label leftNomLabel = new Label("Nom:");
+        leftNomLabel.setTextFill(Color.WHITE);
+        Label leftPrenomLabel = new Label("Prenom:");
+        leftPrenomLabel.setTextFill(Color.WHITE);
+        Label leftTelLabel = new Label("Telephone:");
+        leftTelLabel.setTextFill(Color.WHITE);
+        Label leftEmailLabel = new Label("Email:");
+        leftEmailLabel.setTextFill(Color.WHITE);
+
+        //Left afficher les labels
+        nomVBoxLeft.getChildren().add(leftNomLabel);
+        prenomVBoxLeft.getChildren().add(leftPrenomLabel);
+        telVBoxLeft.getChildren().add(leftTelLabel);
+        emailVBoxLeft.getChildren().add(leftEmailLabel);
+        specialiteVBoxLeft.getChildren().add(leftSpecLabel);
+        //Left afficher les inputs
+        nomVBoxLeft.getChildren().add(leftNomInput);
+        prenomVBoxLeft.getChildren().add(leftPrenomInput);
+        telVBoxLeft.getChildren().add(leftTelInput);
+        emailVBoxLeft.getChildren().add(leftEmailInput);
+        specialiteVBoxLeft.getChildren().add(leftSpecInput);
+        //Left inputsButton
+        Button updateBtn = new Button("Modifier");
+        btnVBoxLeft.getChildren().add(updateBtn);
+        btnVBoxLeft.setAlignment(Pos.CENTER);
+        updateBtn.setCursor(Cursor.HAND);
+        updateBtn.setAlignment(Pos.CENTER);
+
+        leftVBox.getChildren().clear();
+        Label leftTitle = new Label("Modifier");
+        leftTitle.setTextFill(Color.WHITE);
+        leftTitle.setFont(Font.font("Bodoni MT italic",24));
+        leftTitle.setPadding(new Insets(0,0,0,30));
+        
+        leftVBox.getChildren().add(leftTitle);
+        leftVBox.getChildren().add(leftInputs);
+        
 
 
     //Tableau
@@ -372,38 +466,125 @@ public class Controller {
         centerVBox.getChildren().add(tableauVBox);
         ScrollPane tableBox = new ScrollPane();
         TableView <Classes> tableView = new TableView();
-        tableView.setMaxHeight(70);
+        tableView.setMaxHeight(150);
 
         //les colones du tableau
         TableColumn <Classes, Integer> id = new TableColumn<>();
         id.setMinWidth(38);
-//        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
         id.setText("ID");
 
         TableColumn <Classes, String> nom = new TableColumn<>();
-        nom.setMinWidth(100);
-//        nom.setCellValueFactory(new PropertyValueFactory<>("Nom"));
+        nom.setMinWidth(80);
+        nom.setCellValueFactory(new PropertyValueFactory<>("Nom"));
         nom.setText("Nom");
 
         TableColumn <Classes, String> prenom = new TableColumn<>();
         prenom.setMinWidth(100);
-//        prenom.setCellValueFactory(new PropertyValueFactory<>("Prenom"));
-        prenom.setText("PrÃ©nom");
+        prenom.setCellValueFactory(new PropertyValueFactory<>("Prenom"));
+        prenom.setText("Prenom");
 
         TableColumn <Classes, String> telephone = new TableColumn<>();
-        telephone.setMinWidth(150);
-//        telephone.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
-        telephone.setText("TÃ©lÃ©phone");
+        telephone.setMinWidth(120);
+        telephone.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
+        telephone.setText("Telephone");
+
+        TableColumn <Classes, Integer> specialite = new TableColumn<>();
+        specialite.setMinWidth(50);
+        specialite.setCellValueFactory(new PropertyValueFactory<>("specialite"));
+        specialite.setText("Specialite");
 
         TableColumn <Classes, Integer> email = new TableColumn<>();
-        email.setMinWidth(250);
-//        email.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        email.setMinWidth(150);
+        email.setCellValueFactory(new PropertyValueFactory<>("Email"));
         email.setText("Email");
 
         //Affichage du tableau
-        tableView.setItems(getEtudiant());
-        tableView.getColumns().addAll(id, nom, prenom, telephone, email);
+
+        tableView.getColumns().addAll(id, nom, prenom, telephone, specialite, email);
         tableauVBox.getChildren().add(tableView);
+
+        //recherche
+        findBtn.setOnAction(a3->{
+            int idFind = Integer.parseInt(idInput.getText());
+            String prenomFind = prenomInput.getText().toString();
+            String nomFind = nomInput.getText().toString();
+            //Find Students Contenu
+//            public ObservableList<Classes> findEtudiant () {
+            ObservableList<Classes> etudiantListe = FXCollections.observableArrayList();
+            //Connexion
+            Connection  cnx =ConnexionMySQL.cnx();
+            PreparedStatement prepared;
+            String query = "SELECT * FROM etudiants WHERE id ="+idFind;
+            Statement st;
+            ResultSet rs;
+
+            try{
+                st = cnx.createStatement();
+                rs = st.executeQuery(query);
+                Classes etudiant;
+                while(rs.next()){
+                    etudiant = new Classes(rs.getInt("id"), rs.getString("nom"),
+                            rs.getString("prenom"), rs.getString("tel"),
+                            rs.getString("email"),rs.getString("specialite"));
+                    etudiantListe.add(etudiant);
+
+                }
+
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+
+
+            tableView.setItems(etudiantListe);
+
+
+        });
+
+        tableView.setOnMouseClicked(a4->{
+            leftNomInput.setText(tableView.getSelectionModel().getSelectedItem().getNom());
+            leftPrenomInput.setText(tableView.getSelectionModel().getSelectedItem().getPrenom());
+            leftTelInput.setText(tableView.getSelectionModel().getSelectedItem().getTelephone());
+            leftEmailInput.setText(tableView.getSelectionModel().getSelectedItem().getEmail());
+            leftSpecInput.setText(tableView.getSelectionModel().getSelectedItem().getSpecialite());
+        });
+        //Update
+        updateBtn.setOnAction(a5->{
+//            UPDATE `etudiants` SET `id`=[value-1],`nom`=[value-2],`prenom`=[value-3],`tel`=[value-4],`email`=[value-5],`specialite`=[value-6] WHERE 1
+            Connection  cnx =ConnexionMySQL.cnx();
+            PreparedStatement prepared;
+            int idUpdate = tableView.getSelectionModel().getSelectedItem().getId();
+            String prenomUpdate = leftPrenomInput.getText().toString();
+            String nomUpdate = leftNomInput.getText().toString();
+            String telUpdate = leftTelInput.getText().toString();
+            String emailUpdate = leftEmailInput.getText().toString();
+            String spacialiteUpdate = leftSpecInput.getText().toString();
+            String sql="UPDATE `etudiants`SET `nom`=?,`prenom`=?,`tel`=?,`email`=?,`specialite`=? WHERE id="+idUpdate;
+            try {
+                prepared=cnx.prepareStatement(sql);
+                prepared.setString(1,nomUpdate);
+                prepared.setString(2,prenomUpdate);
+                prepared.setString(3,telUpdate);
+                prepared.setString(4,emailUpdate);
+                prepared.setString(5,spacialiteUpdate);
+                prepared.execute();
+
+                leftPrenomInput.setText("");
+                leftNomInput.setText("");
+                leftTelInput.setText("");
+                leftEmailInput.setText("");
+                leftSpecInput.setText("");
+
+
+
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
+        });
+
+
+
 
 
         //Button Home
@@ -434,7 +615,7 @@ public class Controller {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion des ÃƒÂ©tudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -480,12 +661,17 @@ public class Controller {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion des ÃƒÂ©tudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
 
         });
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }

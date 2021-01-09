@@ -9,7 +9,7 @@
 
 <BorderPane prefHeight="450.0" prefWidth="883.0" style="-fx-background-color: #0081cb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <left>
-      <VBox prefHeight="394.0" prefWidth="219.0" style="-fx-background-color: #00b0ff;" BorderPane.alignment="CENTER">
+      <VBox id="leftVBox" fx:id="leftVBox" prefHeight="394.0" prefWidth="219.0" style="-fx-background-color: #00b0ff;" BorderPane.alignment="CENTER">
          <children>
             <Label text="Dashboard" textFill="WHITE">
                <font>
