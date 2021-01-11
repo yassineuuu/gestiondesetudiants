@@ -7,15 +7,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="450.0" prefWidth="883.0" style="-fx-background-color: #0081cb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane onKeyPressed="#afficherSpecialite" prefHeight="450.0" prefWidth="883.0" style="-fx-background-color: #0081cb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <left>
       <VBox prefHeight="394.0" prefWidth="219.0" style="-fx-background-color: #00b0ff;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Dashboard" textFill="WHITE">
+            <Label fx:id="leftTitle" text="Dashboard" textFill="WHITE">
                <font>
                   <Font name="Monotype Koufi Bold" size="20.0" />
                </font></Label>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="100.0">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
@@ -138,7 +138,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button id="removeBtn" fx:id="removeBtn" mnemonicParsing="false" onAction="#removeFromList" opacity="0.0" prefHeight="101.0" prefWidth="89.0" text="Button" translateX="-90.0">
+                        <Button id="removeBtn" fx:id="afficherModules" mnemonicParsing="false" onAction="#afficherModules" opacity="0.0" prefHeight="101.0" prefWidth="89.0" text="Button" translateX="-90.0">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></Button>

@@ -29,7 +29,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller{
 
     //Variables
 
@@ -43,7 +43,9 @@ public class Controller implements Initializable {
     @FXML
     private Button addBtn;
     @FXML
-    private Button removeBtn;
+    private Button afficherModules;
+    @FXML
+    private Label leftTitle;
     @FXML
     private VBox leftVBox;
 
@@ -116,12 +118,12 @@ public class Controller implements Initializable {
         telephone.setCellValueFactory(new PropertyValueFactory<>("Telephone"));
         telephone.setText("Telephone");
 
-        TableColumn <Classes, Integer> specialite = new TableColumn<>();
+        TableColumn <Classes, String> specialite = new TableColumn<>();
         specialite.setMinWidth(50);
         specialite.setCellValueFactory(new PropertyValueFactory<>("specialite"));
         specialite.setText("Specialité");
 
-        TableColumn <Classes, Integer> email = new TableColumn<>();
+        TableColumn <Classes, String> email = new TableColumn<>();
         email.setMinWidth(150);
         email.setCellValueFactory(new PropertyValueFactory<>("Email"));
         email.setText("Email");
@@ -327,7 +329,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion des Etudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -339,6 +341,7 @@ public class Controller implements Initializable {
     public void findInList(){
         centerVBox.getChildren().clear();
         leftVBox.getChildren().clear();
+        leftTitle.setText("Modifier");
         title.setText("Rechercher un Etudiant");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font("Bodoni MT italic",36));
@@ -352,19 +355,19 @@ public class Controller implements Initializable {
         centerVBox.getChildren().add(inputsHbox);
 
         //instanciation des VBox
-        VBox idVBox = new VBox();
-        idVBox.setPadding(new Insets(5,20,5,5));
-        inputsHbox.getChildren().add(idVBox);
-        VBox nomVBox = new VBox();
-        nomVBox.setPadding(new Insets(5,20,5,5));
-        inputsHbox.getChildren().add(nomVBox);
+//        VBox idVBox = new VBox();
+//        idVBox.setPadding(new Insets(5,20,5,5));
+//        inputsHbox.getChildren().add(idVBox);
+//        VBox nomVBox = new VBox();
+//        nomVBox.setPadding(new Insets(5,20,5,5));
+//        inputsHbox.getChildren().add(nomVBox);
         VBox prenomVBox = new VBox();
         prenomVBox.setPadding(new Insets(5,20,5,5));
         inputsHbox.getChildren().add(prenomVBox);
         VBox btnVBox = new VBox();
         btnVBox.setPadding(new Insets(5,20,-10,5));
         inputsHbox.getChildren().add(btnVBox);
-        
+
         VBox leftInputs = new VBox();
         leftInputs.setPadding(new Insets(5,20,-10,5));
         leftVBox.getChildren().add(leftInputs);
@@ -403,13 +406,13 @@ public class Controller implements Initializable {
         TextField prenomInput = new TextField();
 
         //afficher les labels
-        idVBox.getChildren().add(idLabel);
-        nomVBox.getChildren().add(nomLabel);
+//        idVBox.getChildren().add(idLabel);
+//        nomVBox.getChildren().add(nomLabel);
         prenomVBox.getChildren().add(prenomLabel);
 
         //afficher les inputs
-        idVBox.getChildren().add(idInput);
-        nomVBox.getChildren().add(nomInput);
+//        idVBox.getChildren().add(idInput);
+//        nomVBox.getChildren().add(nomInput);
         prenomVBox.getChildren().add(prenomInput);
 
         //inputsButton
@@ -459,7 +462,6 @@ public class Controller implements Initializable {
         btnVBoxLeft.setAlignment(Pos.CENTER);
         updateBtn.setCursor(Cursor.HAND);
         btnVBoxLeft.getChildren().add(new Label());
-        btnVBoxLeft.getChildren().add(new Label());
 
         Image deleteImg = new Image(getClass().getResource("img/delete-forever.png").toString());
         ImageView deleteIV = new ImageView();
@@ -487,14 +489,13 @@ public class Controller implements Initializable {
         });
 
         leftVBox.getChildren().clear();
-        Label leftTitle = new Label("Modifier");
         leftTitle.setTextFill(Color.WHITE);
         leftTitle.setFont(Font.font("Bodoni MT italic",24));
         leftTitle.setPadding(new Insets(0,0,0,30));
-        
+
         leftVBox.getChildren().add(leftTitle);
         leftVBox.getChildren().add(leftInputs);
-        
+
 
 
     //Tableau
@@ -542,16 +543,18 @@ public class Controller implements Initializable {
 
         //recherche
         findBtn.setOnAction(a3->{
-            int idFind = Integer.parseInt(idInput.getText());
+//            int idFind = Integer.parseInt(idInput.getText());
             String prenomFind = prenomInput.getText().toString();
-            String nomFind = nomInput.getText().toString();
+//            String nomFind = nomInput.getText().toString();
+            System.out.println(prenomFind);
+
             //Find Students Contenu
 //            public ObservableList<Classes> findEtudiant () {
             ObservableList<Classes> etudiantListe = FXCollections.observableArrayList();
             //Connexion
             Connection  cnx =ConnexionMySQL.cnx();
             PreparedStatement prepared;
-            String query = "SELECT * FROM etudiants WHERE id ="+idFind;
+            String query = "SELECT * FROM etudiants WHERE prenom = '" + prenomFind+"'";
             Statement st;
             ResultSet rs;
 
@@ -675,7 +678,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion Des Etudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -683,7 +686,35 @@ public class Controller implements Initializable {
         });
     }
 
-    public void removeFromList(){
+    //LES Modules
+
+
+    //get Modules (Contenue du tableau)
+    public ObservableList<Modules> getModules(){
+        ObservableList<Modules> moduleList = FXCollections.observableArrayList();
+        //Connexion
+        Connection  cnx =ConnexionMySQL.cnx();
+        PreparedStatement prepared;
+        String query = "SELECT * FROM modules";
+
+        Statement st;
+        ResultSet rs;
+
+        try{
+            st = cnx.createStatement();
+            rs = st.executeQuery(query);
+            Modules Module;
+            while(rs.next()){
+                Module = new Modules(rs.getInt("id"), rs.getString("specialite"), rs.getString("module1"), rs.getString("module2"), rs.getString("module3"),rs.getString("module4"),rs.getString("module5"), rs.getString("module6"), rs.getString("module7"),rs.getString("module8"), rs.getString("module9"), rs.getString("module10"));
+                moduleList.add(Module);
+            }
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return moduleList;
+    }
+    public void afficherModules(){
         centerVBox.getChildren().clear();
         title.setText("Liste Des Modules");
         title.setTextFill(Color.WHITE);
@@ -691,6 +722,75 @@ public class Controller implements Initializable {
         title.setPadding(new Insets(0,0,30,0));
         centerVBox.getChildren().add(title);
 
+//Tableau
+        TableView <Modules> tv = new TableView<Modules>();
+        tv.setMaxHeight(300);
+        //les colones du tableau
+        TableColumn <Modules, Integer> id = new TableColumn<>();
+        id.setMinWidth(38);
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        id.setText("ID");
+
+        TableColumn <Modules, String> Specialite = new TableColumn<>();
+        Specialite.setMinWidth(80);
+        Specialite.setCellValueFactory(new PropertyValueFactory<>("Specialite"));
+        Specialite.setText("Specialite");
+
+        TableColumn <Modules, String> module1 = new TableColumn<>();
+        module1.setMinWidth(90);
+        module1.setCellValueFactory(new PropertyValueFactory<>("Modules1"));
+        module1.setText("Module1");
+
+        TableColumn <Modules, String> module2 = new TableColumn<>();
+        module2.setMinWidth(120);
+        module2.setCellValueFactory(new PropertyValueFactory<>("Modules2"));
+        module2.setText("Module2");
+
+        TableColumn <Modules, String> module3 = new TableColumn<>();
+        module3.setMinWidth(50);
+        module3.setCellValueFactory(new PropertyValueFactory<>("Modules3"));
+        module3.setText("Module3");
+
+        TableColumn <Modules, String> module4 = new TableColumn<>();
+        module4.setMinWidth(150);
+        module4.setCellValueFactory(new PropertyValueFactory<>("Modules4"));
+        module4.setText("Module4");
+
+        TableColumn <Modules, String> module5 = new TableColumn<>();
+        module5.setMinWidth(150);
+        module5.setCellValueFactory(new PropertyValueFactory<>("Modules5"));
+        module5.setText("Module5");
+
+        TableColumn <Modules, String> module6 = new TableColumn<>();
+        module6.setMinWidth(150);
+        module6.setCellValueFactory(new PropertyValueFactory<>("Modules6"));
+        module6.setText("Module6");
+
+        TableColumn <Modules, String> module7 = new TableColumn<>();
+        module7.setMinWidth(150);
+        module7.setCellValueFactory(new PropertyValueFactory<>("Modules7"));
+        module7.setText("Module7");
+
+        TableColumn <Modules, String> module8 = new TableColumn<>();
+        module8.setMinWidth(150);
+        module8.setCellValueFactory(new PropertyValueFactory<>("Modules8"));
+        module8.setText("Module8");
+
+        TableColumn <Modules, String> module9 = new TableColumn<>();
+        module9.setMinWidth(150);
+        module9.setCellValueFactory(new PropertyValueFactory<>("Modules9"));
+        module9.setText("Module9");
+
+        TableColumn <Modules, String> module10 = new TableColumn<>();
+        module10.setMinWidth(150);
+        module10.setCellValueFactory(new PropertyValueFactory<>("Modules10"));
+        module10.setText("Module10");
+
+        //Affichage du tableau
+        tv.setItems(getModules());
+        tv.getColumns().addAll(id, Specialite, module1, module2, module3, module4, module5,module6, module7, module8, module9, module10);
+        System.out.println(Specialite);
+        centerVBox.getChildren().add(tv);
 
 
         //Button Home
@@ -721,7 +821,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             Stage home = new Stage();
-            home.setTitle("Gestion des Ã©tudiants");
+            home.setTitle("Gestion des Etudiants");
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -730,8 +830,35 @@ public class Controller implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    //get Spécialité
+    public ObservableList<Specialite> getSpeciality(){
+        ObservableList<Specialite> specList = FXCollections.observableArrayList();
+        //Connexion
+        Connection  cnx =ConnexionMySQL.cnx();
+        PreparedStatement prepared;
+        String query = "SELECT * FROM specialite";
 
+        Statement st;
+        ResultSet rs;
+
+        try{
+            st = cnx.createStatement();
+            rs = st.executeQuery(query);
+            Specialite speciality;
+            while(rs.next()){
+                speciality = new Specialite(rs.getInt("id"), rs.getString("nom"));
+                specList.add(speciality);
+            }
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return specList;
     }
+    //Afficher les specialites
+    public void afficherSpecialite(){
+        System.out.println("yeeey");
+    }
+
+
 }
