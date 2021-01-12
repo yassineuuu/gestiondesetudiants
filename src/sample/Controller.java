@@ -407,13 +407,11 @@ public class Controller{
         TextField prenomInput = new TextField();
 
         //afficher les labels
-//        idVBox.getChildren().add(idLabel);
-//        nomVBox.getChildren().add(nomLabel);
+
         prenomVBox.getChildren().add(prenomLabel);
 
         //afficher les inputs
-//        idVBox.getChildren().add(idInput);
-//        nomVBox.getChildren().add(nomInput);
+
         prenomVBox.getChildren().add(prenomInput);
 
         //inputsButton
@@ -550,7 +548,6 @@ public class Controller{
             System.out.println(prenomFind);
 
             //Find Students Contenu
-//            public ObservableList<Classes> findEtudiant () {
             ObservableList<Classes> etudiantListe = FXCollections.observableArrayList();
             //Connexion
             Connection  cnx =ConnexionMySQL.cnx();
@@ -788,14 +785,14 @@ public class Controller{
         module10.setCellValueFactory(new PropertyValueFactory<>("Modules10"));
         module10.setText("Module10");
 
-        //Affichage du tableau
+        //Affichage du tableau modules
         tv.setItems(getModules());
         tv.getColumns().addAll(id, Specialite, module1, module2, module3, module4, module5,module6, module7, module8, module9, module10);
         System.out.println(Specialite);
         centerVBox.getChildren().add(tv);
 
 
-        //Left Section
+        //L'AJOUT des modules
         VBox leftInputs = new VBox();
         leftInputs.setPadding(new Insets(5,20,-10,5));
         leftVBox.getChildren().add(leftInputs);
@@ -838,8 +835,14 @@ public class Controller{
         leftInputs.getChildren().add(btnVBoxLeft);
 
 
-        //Left VBox
-        TextField leftSpecInput = new TextField();
+        //Modules Ajout inputs
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "JEE",
+                        "FEBE",
+                        "C#"
+                );
+        ComboBox leftSpecInput = new ComboBox(options);
         TextField m1Input = new TextField();
         TextField m2Input = new TextField();
         TextField m3Input = new TextField();
@@ -850,7 +853,8 @@ public class Controller{
         TextField m8Input = new TextField();
         TextField m9Input = new TextField();
         TextField m10Input = new TextField();
-        //left labels
+
+//        Modules Ajout labels
         Label leftSpecLabel = new Label("Specialite:");
         leftSpecLabel.setTextFill(Color.WHITE);
         Label leftModule1Label = new Label("Module1:");
@@ -878,6 +882,7 @@ public class Controller{
         //Left inputsButton
         Image addImg = new Image(getClass().getResource("img/add.png").toString());
         ImageView addIV = new ImageView();
+        addIV.setCursor(Cursor.HAND);
         addIV.setImage(addImg);
         addIV.setFitWidth(45);
         addIV.setFitHeight(45);
@@ -937,6 +942,45 @@ public class Controller{
             btnVBoxLeft.setAlignment(Pos.CENTER);
             addBtn.setCursor(Cursor.HAND);
             btnVBoxC.getChildren().add(addBtn);
+            addBtn.setOnAction(a8->{
+                Connection  cnx =ConnexionMySQL.cnx();
+                PreparedStatement prepared;
+                String spacialite = String.valueOf(leftSpecInput.getSelectionModel().getSelectedItem());
+                String M1 = m1Input.getText().toString();
+                String M2 = m2Input.getText().toString();
+                String M3 = m3Input.getText().toString();
+                String M4 = m4Input.getText().toString();
+                String M5 = m5Input.getText().toString();
+                String M6 = m6Input.getText().toString();
+                String M7 = m7Input.getText().toString();
+                String M8 = m8Input.getText().toString();
+                String M9 = m9Input.getText().toString();
+                String M10 = m10Input.getText().toString();
+//                String spacialite = leftSpecInput.getSelectionModel().getSelectedItem().toString();
+                String sql="INSERT INTO `modules`(`specialite`, `module1`, `module2`, `module3`, `module4`, `module5`, `module6`, `module7`, `module8`, `module9`, `module10`) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+                try {
+                    prepared=cnx.prepareStatement(sql);
+                    prepared.setString(1,spacialite);
+                    prepared.setString(2,M1);
+                    prepared.setString(3,M2);
+                    prepared.setString(4,M3);
+                    prepared.setString(5,M4);
+                    prepared.setString(6,M5);
+                    prepared.setString(7,M6);
+                    prepared.setString(8,M7);
+                    prepared.setString(9,M8);
+                    prepared.setString(10,M9);
+                    prepared.setString(11,M10);
+                    prepared.execute();
+
+
+                    afficherModules();
+
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            });
 
         });
 
@@ -950,13 +994,126 @@ public class Controller{
         btnVBoxLeft.setAlignment(Pos.CENTER);
         updateBtn.setCursor(Cursor.HAND);
         btnVBoxLeft.getChildren().add(new Label());
+        updateBtn.setOnMouseClicked(e5->{
+            centerVBox.getChildren().clear();
+            FlowPane ajtModule = new FlowPane(Orientation.VERTICAL);
+            ajtModule.setMaxHeight(220);
+            ajtModule.getChildren().add(specVBoxLeft);
+            ajtModule.getChildren().add(m1VBoxLeft);
+            ajtModule.getChildren().add(m2VBoxLeft);
+            ajtModule.getChildren().add(m3VBoxLeft);
+            ajtModule.getChildren().add(m4VBoxLeft);
+            ajtModule.getChildren().add(m5VBoxLeft);
+            ajtModule.getChildren().add(m6VBoxLeft);
+            ajtModule.getChildren().add(m7VBoxLeft);
+            ajtModule.getChildren().add(m8VBoxLeft);
+            ajtModule.getChildren().add(m9VBoxLeft);
+            ajtModule.getChildren().add(m10VBoxLeft);
+            centerVBox.getChildren().add(ajtModule);
+
+//      Left afficher les labels
+            specVBoxLeft.getChildren().add(leftSpecLabel);
+            m1VBoxLeft.getChildren().add(leftModule1Label);
+            m2VBoxLeft.getChildren().add(leftModule2Label);
+            m3VBoxLeft.getChildren().add(leftModule3Label);
+            m4VBoxLeft.getChildren().add(leftModule4Label);
+            m5VBoxLeft.getChildren().add(leftModule5Label);
+            m6VBoxLeft.getChildren().add(leftModule6Label);
+            m7VBoxLeft.getChildren().add(leftModule7Label);
+            m8VBoxLeft.getChildren().add(leftModule8Label);
+            m9VBoxLeft.getChildren().add(leftModule9Label);
+            m10VBoxLeft.getChildren().add(leftModule10Label);
+//        m5VBoxLeft.getChildren().add(leftModule4Label);
+            //Left afficher les inputs
+            specVBoxLeft.getChildren().add(leftSpecInput);
+            m1VBoxLeft.getChildren().add(m1Input);
+            m2VBoxLeft.getChildren().add(m2Input);
+            m3VBoxLeft.getChildren().add(m3Input);
+            m4VBoxLeft.getChildren().add(m4Input);
+            m5VBoxLeft.getChildren().add(m5Input);
+            m6VBoxLeft.getChildren().add(m6Input);
+            m7VBoxLeft.getChildren().add(m7Input);
+            m8VBoxLeft.getChildren().add(m8Input);
+            m9VBoxLeft.getChildren().add(m9Input);
+            m10VBoxLeft.getChildren().add(m10Input);
+
+//        m5VBoxLeft.getChildren().add(leftSpecInput);
+
+            VBox btnVBoxC = new VBox();
+            btnVBoxC.setPadding(new Insets(5,40,-10,15));
+            ajtModule.getChildren().add(btnVBoxC);
+            Button addBtn = new Button("Modifier");
+            btnVBoxLeft.getChildren().add(addBtn);
+            btnVBoxLeft.setAlignment(Pos.CENTER);
+            addBtn.setCursor(Cursor.HAND);
+            btnVBoxC.getChildren().add(addBtn);
+            addBtn.setOnAction(e6->{
+
+                Connection  cnx =ConnexionMySQL.cnx();
+                PreparedStatement prepared;
+                leftSpecInput.setValue(tv.getSelectionModel().getSelectedItem().getSpecialite().toString());
+                m1Input.setText(tv.getSelectionModel().getSelectedItem().getModules1().toString());
+                String spacialite = leftSpecInput.getSelectionModel().getSelectedItem().toString();
+                String M1 = m1Input.getText().toString();
+                String M2 = m2Input.getText().toString();
+                String M3 = m3Input.getText().toString();
+                String M4 = m4Input.getText().toString();
+                String M5 = m5Input.getText().toString();
+                String M6 = m6Input.getText().toString();
+                String M7 = m7Input.getText().toString();
+                String M8 = m8Input.getText().toString();
+                String M9 = m9Input.getText().toString();
+                String M10 = m10Input.getText().toString();
+                int idUpdate = tv.getSelectionModel().getSelectedItem().getId();
+                String sql="UPDATE `modules` SET `specialite`=?,`module1`=?,`module2`=?,`module3`=?,`module4`=?,`module5`=?,`module6`=?,`module7`=?,`module8`=?,`module9`=?,`module10`=? WHERE id ="+idUpdate;
+                try {
+
+                    prepared=cnx.prepareStatement(sql);
+                    prepared.setString(1,spacialite);
+                    prepared.setString(2,M1);
+                    prepared.setString(3,M2);
+                    prepared.setString(4,M3);
+                    prepared.setString(5,M4);
+                    prepared.setString(6,M5);
+                    prepared.setString(7,M6);
+                    prepared.setString(8,M7);
+                    prepared.setString(9,M8);
+                    prepared.setString(10,M9);
+                    prepared.setString(11,M10);
+                    prepared.execute();
+
+
+                    afficherModules();
+
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            });
+        });
 
         Image deleteImg = new Image(getClass().getResource("img/delete-forever.png").toString());
         ImageView deleteIV = new ImageView();
+        deleteIV.setCursor(Cursor.HAND);
         deleteIV.setImage(deleteImg);
         deleteIV.setFitWidth(45);
         deleteIV.setFitHeight(45);
         btnVBoxLeft.getChildren().add(deleteIV);
+        deleteIV.setOnMouseClicked(a9->{
+            Connection  cnx =ConnexionMySQL.cnx();
+            PreparedStatement prepared;
+            int idDelete = tv.getSelectionModel().getSelectedItem().getId();
+            String sql = "DELETE FROM `modules` WHERE id="+idDelete;
+
+            try {
+                prepared = cnx.prepareStatement(sql);
+                prepared.execute();
+
+                afficherModules();
+            }catch (SQLException e2){
+                e2.printStackTrace();
+            }
+        });
 
 
         addIV.setOnMousePressed(e2->{
