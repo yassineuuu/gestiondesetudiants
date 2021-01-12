@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -48,6 +49,8 @@ public class Controller{
     private Label leftTitle;
     @FXML
     private VBox leftVBox;
+    @FXML
+    private Label leftSpecLabel;
 
     private Label title = new Label();
 
@@ -164,8 +167,7 @@ public class Controller{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Stage home = new Stage();
-            home.setTitle("Gestion Ees Etudiants");
+            Stage home = (Stage) ((Node)leftVBox).getScene().getWindow();
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -328,8 +330,7 @@ public class Controller{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Stage home = new Stage();
-            home.setTitle("Gestion des Etudiants");
+            Stage home = (Stage) ((Node)leftVBox).getScene().getWindow();
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -677,11 +678,11 @@ public class Controller{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Stage home = new Stage();
-            home.setTitle("Gestion Des Etudiants");
+            Stage home = (Stage) ((Node)leftVBox).getScene().getWindow();
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
+
 
         });
     }
@@ -716,6 +717,7 @@ public class Controller{
     }
     public void afficherModules(){
         centerVBox.getChildren().clear();
+        leftVBox.getChildren().clear();
         title.setText("Liste Des Modules");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font("Bodoni MT italic",36));
@@ -793,6 +795,198 @@ public class Controller{
         centerVBox.getChildren().add(tv);
 
 
+        //Left Section
+        VBox leftInputs = new VBox();
+        leftInputs.setPadding(new Insets(5,20,-10,5));
+        leftVBox.getChildren().add(leftInputs);
+
+        VBox specVBoxLeft = new VBox();
+        specVBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(specVBoxLeft);
+        VBox m1VBoxLeft = new VBox();
+        m1VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m1VBoxLeft);
+        VBox m2VBoxLeft = new VBox();
+        m2VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m2VBoxLeft);
+        VBox m3VBoxLeft = new VBox();
+        m3VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m3VBoxLeft);
+        VBox m4VBoxLeft = new VBox();
+        m4VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m4VBoxLeft);
+        VBox m5VBoxLeft = new VBox();
+        m5VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m5VBoxLeft);
+        VBox m6VBoxLeft = new VBox();
+        m6VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m6VBoxLeft);
+        VBox m7VBoxLeft = new VBox();
+        m7VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m7VBoxLeft);
+        VBox m8VBoxLeft = new VBox();
+        m8VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m8VBoxLeft);
+        VBox m9VBoxLeft = new VBox();
+        m9VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m9VBoxLeft);
+        VBox m10VBoxLeft = new VBox();
+        m10VBoxLeft.setPadding(new Insets(5,20,5,5));
+        leftInputs.getChildren().add(m10VBoxLeft);
+        VBox btnVBoxLeft = new VBox();
+        btnVBoxLeft.setPadding(new Insets(5,40,-10,15));
+        leftInputs.getChildren().add(btnVBoxLeft);
+
+
+        //Left VBox
+        TextField leftSpecInput = new TextField();
+        TextField m1Input = new TextField();
+        TextField m2Input = new TextField();
+        TextField m3Input = new TextField();
+        TextField m4Input = new TextField();
+        TextField m5Input = new TextField();
+        TextField m6Input = new TextField();
+        TextField m7Input = new TextField();
+        TextField m8Input = new TextField();
+        TextField m9Input = new TextField();
+        TextField m10Input = new TextField();
+        //left labels
+        Label leftSpecLabel = new Label("Specialite:");
+        leftSpecLabel.setTextFill(Color.WHITE);
+        Label leftModule1Label = new Label("Module1:");
+        leftModule1Label.setTextFill(Color.WHITE);
+        Label leftModule2Label = new Label("Module2:");
+        leftModule2Label.setTextFill(Color.WHITE);
+        Label leftModule3Label = new Label("Module3:");
+        leftModule3Label.setTextFill(Color.WHITE);
+        Label leftModule4Label = new Label("Module4:");
+        leftModule4Label.setTextFill(Color.WHITE);
+        Label leftModule5Label = new Label("Module5:");
+        leftModule5Label.setTextFill(Color.WHITE);
+        Label leftModule6Label = new Label("Module6:");
+        leftModule6Label.setTextFill(Color.WHITE);
+        Label leftModule7Label = new Label("Module7:");
+        leftModule7Label.setTextFill(Color.WHITE);
+        Label leftModule8Label = new Label("Module8:");
+        leftModule8Label.setTextFill(Color.WHITE);
+        Label leftModule9Label = new Label("Module9:");
+        leftModule9Label.setTextFill(Color.WHITE);
+        Label leftModule10Label = new Label("Module10:");
+        leftModule10Label.setTextFill(Color.WHITE);
+
+
+        //Left inputsButton
+        Image addImg = new Image(getClass().getResource("img/add.png").toString());
+        ImageView addIV = new ImageView();
+        addIV.setImage(addImg);
+        addIV.setFitWidth(45);
+        addIV.setFitHeight(45);
+        btnVBoxLeft.getChildren().add(addIV);
+        btnVBoxLeft.getChildren().add(new Label());
+
+        addIV.setOnMouseClicked(a7->{
+            centerVBox.getChildren().clear();
+            FlowPane ajtModule = new FlowPane(Orientation.VERTICAL);
+            ajtModule.setMaxHeight(220);
+            ajtModule.getChildren().add(specVBoxLeft);
+            ajtModule.getChildren().add(m1VBoxLeft);
+            ajtModule.getChildren().add(m2VBoxLeft);
+            ajtModule.getChildren().add(m3VBoxLeft);
+            ajtModule.getChildren().add(m4VBoxLeft);
+            ajtModule.getChildren().add(m5VBoxLeft);
+            ajtModule.getChildren().add(m6VBoxLeft);
+            ajtModule.getChildren().add(m7VBoxLeft);
+            ajtModule.getChildren().add(m8VBoxLeft);
+            ajtModule.getChildren().add(m9VBoxLeft);
+            ajtModule.getChildren().add(m10VBoxLeft);
+            centerVBox.getChildren().add(ajtModule);
+
+//      Left afficher les labels
+        specVBoxLeft.getChildren().add(leftSpecLabel);
+        m1VBoxLeft.getChildren().add(leftModule1Label);
+        m2VBoxLeft.getChildren().add(leftModule2Label);
+        m3VBoxLeft.getChildren().add(leftModule3Label);
+        m4VBoxLeft.getChildren().add(leftModule4Label);
+        m5VBoxLeft.getChildren().add(leftModule5Label);
+        m6VBoxLeft.getChildren().add(leftModule6Label);
+        m7VBoxLeft.getChildren().add(leftModule7Label);
+        m8VBoxLeft.getChildren().add(leftModule8Label);
+        m9VBoxLeft.getChildren().add(leftModule9Label);
+        m10VBoxLeft.getChildren().add(leftModule10Label);
+//        m5VBoxLeft.getChildren().add(leftModule4Label);
+        //Left afficher les inputs
+        specVBoxLeft.getChildren().add(leftSpecInput);
+        m1VBoxLeft.getChildren().add(m1Input);
+        m2VBoxLeft.getChildren().add(m2Input);
+        m3VBoxLeft.getChildren().add(m3Input);
+        m4VBoxLeft.getChildren().add(m4Input);
+        m5VBoxLeft.getChildren().add(m5Input);
+        m6VBoxLeft.getChildren().add(m6Input);
+        m7VBoxLeft.getChildren().add(m7Input);
+        m8VBoxLeft.getChildren().add(m8Input);
+        m9VBoxLeft.getChildren().add(m9Input);
+        m10VBoxLeft.getChildren().add(m10Input);
+
+//        m5VBoxLeft.getChildren().add(leftSpecInput);
+
+            VBox btnVBoxC = new VBox();
+            btnVBoxC.setPadding(new Insets(5,40,-10,15));
+            ajtModule.getChildren().add(btnVBoxC);
+            Button addBtn = new Button("Ajouter");
+            btnVBoxLeft.getChildren().add(addBtn);
+            btnVBoxLeft.setAlignment(Pos.CENTER);
+            addBtn.setCursor(Cursor.HAND);
+            btnVBoxC.getChildren().add(addBtn);
+
+        });
+
+
+        Image editImg = new Image(getClass().getResource("img/edit.png").toString());
+        ImageView updateBtn = new ImageView();
+        updateBtn.setImage(editImg);
+        updateBtn.setFitHeight(45);
+        updateBtn.setFitWidth(45);
+        btnVBoxLeft.getChildren().add(updateBtn);
+        btnVBoxLeft.setAlignment(Pos.CENTER);
+        updateBtn.setCursor(Cursor.HAND);
+        btnVBoxLeft.getChildren().add(new Label());
+
+        Image deleteImg = new Image(getClass().getResource("img/delete-forever.png").toString());
+        ImageView deleteIV = new ImageView();
+        deleteIV.setImage(deleteImg);
+        deleteIV.setFitWidth(45);
+        deleteIV.setFitHeight(45);
+        btnVBoxLeft.getChildren().add(deleteIV);
+
+
+        addIV.setOnMousePressed(e2->{
+            addIV.setScaleX(0.9);
+            addIV.setScaleY(0.9);
+        });
+        addIV.setOnMouseReleased(e3->{
+            addIV.setScaleX(1);
+            addIV.setScaleY(1);
+        });
+
+        updateBtn.setOnMousePressed(e2->{
+            updateBtn.setScaleX(0.9);
+            updateBtn.setScaleY(0.9);
+        });
+        updateBtn.setOnMouseReleased(e3->{
+            updateBtn.setScaleX(1);
+            updateBtn.setScaleY(1);
+        });
+        deleteIV.setOnMousePressed(e2->{
+            deleteIV.setScaleX(0.9);
+            deleteIV.setScaleY(0.9);
+        });
+        deleteIV.setOnMouseReleased(e3->{
+            deleteIV.setScaleX(1);
+            deleteIV.setScaleY(1);
+        });
+
+
+
         //Button Home
         GridPane homeBox = new GridPane();
         centerVBox.getChildren().add(homeBox);
@@ -820,8 +1014,7 @@ public class Controller{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Stage home = new Stage();
-            home.setTitle("Gestion des Etudiants");
+            Stage home = (Stage) ((Node)leftVBox).getScene().getWindow();
             Scene scene = new Scene(root);
             home.setScene(scene);
             home.show();
@@ -857,7 +1050,7 @@ public class Controller{
     }
     //Afficher les specialites
     public void afficherSpecialite(){
-        System.out.println("yeeey");
+
     }
 
 

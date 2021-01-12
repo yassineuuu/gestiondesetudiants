@@ -20,38 +20,21 @@
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
                <children>
-                  <Label id="label1" text="Classe1">
-                     <font>
-                        <Font name="Roboto Light" size="16.0" />
-                     </font>
+                  <HBox onMouseClicked="#afficherSpecialite">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" />
                      </VBox.margin>
-                  </Label>
-                  <Label id="label2" layoutX="25.0" layoutY="15.0" text="Classe 2">
-                     <font>
-                        <Font name="Roboto Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label id="label3" layoutX="25.0" layoutY="57.0" text="Classe 3">
-                     <font>
-                        <Font name="Roboto Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label id="label4" layoutX="25.0" layoutY="99.0" text="Classe 4">
-                     <font>
-                        <Font name="Roboto Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="20.0" left="10.0" />
-                     </VBox.margin>
-                  </Label>
+                     <children>
+                        <Label id="label1" text="Spécialité:">
+                           <font>
+                              <Font name="Roboto Light" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
                </children>
                <padding>
                   <Insets left="5.0" top="5.0" />
